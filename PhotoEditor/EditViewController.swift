@@ -3,6 +3,8 @@ import UIKit
 class EditViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     var image: UIImage!
+    var imageOrientation: UIImage.Orientation!
+    var imageScale: CGFloat!
     var ciImage = CIImage()
     
     var brightness: Float! = 0
@@ -18,6 +20,8 @@ class EditViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         super.viewDidLoad()
         
         Image.image = image
+        imageOrientation = image.imageOrientation
+        imageScale = image.scale
         ciImage = CIImage(cgImage: (image?.cgImage)!)
     }
 
@@ -70,7 +74,7 @@ class EditViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         let context = CIContext(options: nil)
         guard let cgImage = context.createCGImage(contrastOutput, from: contrastOutput.extent) else { return nil }
-        let processedImage = UIImage(cgImage: cgImage)
+        let processedImage = UIImage(cgImage: cgImage, scale: imageScale, orientation: imageOrientation)
         
         return processedImage
     }
